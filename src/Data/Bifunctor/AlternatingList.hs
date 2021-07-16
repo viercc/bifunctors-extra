@@ -43,8 +43,8 @@ instance (Monoid a) => Semigroup (AltList a b) where
   Next a b r <> ab' = Next a b (r <> ab')
 
   stimes n
-     | n <= 0    = aux
-     | otherwise = error "stimes: positive multiplier expected"
+     | n <= 0    = error "stimes: positive multiplier expected"
+     | otherwise = aux
     where
       aux (Last a) = Last (stimes n a)
       aux (Next a0 b (Last a1)) = Next a0 b $ foldr (\_ -> Next a' b) (Last a1) (genericReplicate (n-1) ())
