@@ -1,0 +1,34 @@
+cabal-version:      2.4
+name:               bifunctors-extra
+version:            0.1.0.0
+synopsis:           Not-so-often-used bifunctors
+-- description:
+-- homepage:
+-- bug-reports:
+license:            BSD-3-Clause
+license-file:       LICENSE
+author:             Koji Miyazato
+maintainer:         viercc@gmail.com
+copyright:          Copyright (C) 2021 Koji Miyazato
+category:           Data, Functor
+extra-source-files: CHANGELOG.md, README.md
+tested-with:
+
+library
+    exposed-modules:  Data.Bifunctor.AlternatingList,
+                      Data.Bifunctor.Yoneda,
+                      Data.Bifunctor.Coyoneda
+    build-depends:    base >= 4.10.2.0,
+                      bifunctors >= 5 && < 6,
+                      semigroupoids
+    hs-source-dirs:   src
+    default-language: Haskell2010
+    ghc-options:      -Wall
+
+test-suite bifunctors-extra-test
+    default-language: Haskell2010
+    type:             exitcode-stdio-1.0
+    hs-source-dirs:   test
+    main-is:          MyLibTest.hs
+    build-depends:    base ^>=4.14.2.0, bifunctors, bifunctors-extra
+    ghc-options:      -Wall

@@ -1,0 +1,7 @@
+cradle:
+  cabal:
+    - path: "src"
+      component: "lib:bifunctors-extra"
+    
+    - path: "test"
+      component: "bifunctors-extra:test:bifunctors-extra-test"

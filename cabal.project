@@ -1,0 +1,4 @@
+packages: bifunctors-extra.cabal
+
+package bifunctors-extra
+    ghc-options: -Werror
