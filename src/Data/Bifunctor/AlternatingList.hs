@@ -1,10 +1,15 @@
 {-# LANGUAGE DeriveTraversable #-}
+{-# LANGUAGE BangPatterns #-}
 
 module Data.Bifunctor.AlternatingList(
-    AltList(..),
-    head, foldMapBoth,toListOfPairs) where
+  AltList(..),
+  head, unzip, foldMapBoth,
+  toListOfPairs, 
+  
+  reverse, unfoldr, unfoldl, fromEithers,fromEithers'
+) where
 
-import Prelude hiding (head)
+import Prelude hiding (head, unzip, reverse)
 
 import Control.Monad (ap)
 import Data.Bifoldable
@@ -14,7 +19,11 @@ import Data.Functor.Apply
 import Data.Semigroup.Bifoldable
 import Data.Semigroup.Bitraversable
 import Data.Semigroup (Semigroup(stimes))
+import Data.List.NonEmpty (NonEmpty)
+import qualified Data.List.NonEmpty as NE
 import Data.List (genericReplicate)
+import Data.Maybe (fromMaybe)
+import Data.Semigroup.Foldable
 
 data AltList a b = Last a | Next a b (AltList a b)
   deriving (Show, Read, Eq, Ord, Functor, Foldable, Traversable)
@@ -23,6 +32,17 @@ head :: AltList a b -> a
 head (Last a) = a
 head (Next a _ _) = a
 
+unzip :: AltList a b -> (NonEmpty a, [b])
+unzip = first toNE . go
+  where
+    toNE = fromMaybe (error "Impossible!") . NE.nonEmpty
+    go (Last a) = ([a], [])
+    go (Next a b r) = case go r of
+      ~(as,bs) -> (a:as, b:bs)
+
+foldMapBoth :: (Semigroup ra, Monoid rb) => (a -> ra) -> (b -> rb) -> AltList a b -> (ra, rb)
+foldMapBoth f g = bimap (foldMap1 f) (foldMap g) . unzip
+
 toListOfPairs :: AltList a b -> (a, [(b,a)])
 toListOfPairs = go
   where
@@ -30,12 +50,34 @@ toListOfPairs = go
     go (Next a b r) = case go r of
       ~(a0,baList) -> (a, (b, a0) : baList)
 
-foldMapBoth :: (Semigroup ra, Monoid rb) => (a -> ra) -> (b -> rb) -> AltList a b -> (ra, rb)
-foldMapBoth f g = go
+reverse :: AltList a b -> AltList a b
+reverse (Last a) = Last a
+reverse (Next a0 b0 r0) = go (Last a0) b0 r0
   where
-    go (Last a) = (f a, mempty)
-    go (Next a b r) = case go r of
-      ~(ra, rb) -> (f a <> ra, g b <> rb)
+    go s b (Last a) = Next a b s
+    go s b (Next a b' r) = go (Next a b s) b' r
+
+unfoldr :: (s -> Either a (a,b,s)) -> s -> AltList a b
+unfoldr step = go
+  where
+    go s = either Last (\(a,b,s') -> Next a b (go s')) $ step s
+
+unfoldl :: (s -> Either a (s,b,a)) -> s -> AltList a b
+unfoldl step = reverse . unfoldr step'
+  where
+    step' s = case step s of
+      Left a -> Left a
+      Right (s',b,a) -> Right (a,b,s')
+
+fromEithers :: (Monoid a) => [Either a b] -> AltList a b
+fromEithers = foldr (\x r -> either Last pure x <> r) (Last mempty)
+
+fromEithers' :: (Monoid a) => [Either a b] -> AltList a b
+fromEithers' = go mempty
+  where
+    go !acc [] = Last acc
+    go !acc (Left a : xs) = go (acc <> a) xs
+    go !acc (Right b : xs) = Next acc b (go mempty xs)
 
 instance (Monoid a) => Semigroup (AltList a b) where
   Last a <> Last a' = Last (a <> a')
