@@ -30,5 +30,5 @@ test-suite bifunctors-extra-test
     type:             exitcode-stdio-1.0
     hs-source-dirs:   test
     main-is:          MyLibTest.hs
-    build-depends:    base ^>=4.14.2.0, bifunctors, bifunctors-extra
+    build-depends:    base >=4.14.2.0, bifunctors, bifunctors-extra
     ghc-options:      -Wall
