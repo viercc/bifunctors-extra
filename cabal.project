@@ -1,4 +1,16 @@
 packages: bifunctors-extra.cabal
 
+allow-newer: all
+
+source-repository-package
+  type: git
+  location: https://github.com/ekmett/comonad.git
+  branch: main
+
+source-repository-package
+    type: git
+    location: https://github.com/ekmett/bifunctors.git
+    tag: ca1116599b85b2344118aed2e49ebb707142598a
+
 package bifunctors-extra
     ghc-options: -Werror

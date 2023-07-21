@@ -16,11 +16,11 @@ tested-with:
 
 library
     exposed-modules:  Data.Bifunctor.AlternatingList,
-                      Data.Bifunctor.Yoneda,
-                      Data.Bifunctor.Coyoneda
-    build-depends:    base >= 4.10.2.0,
-                      bifunctors >= 5 && < 6,
-                      semigroupoids
+                      Data.Bifunctor.Free
+    build-depends:    base >= 4.18,
+                      bifunctors >= 6,
+                      comonad,
+                      free
     hs-source-dirs:   src
     default-language: Haskell2010
     ghc-options:      -Wall
@@ -30,5 +30,5 @@ test-suite bifunctors-extra-test
     type:             exitcode-stdio-1.0
     hs-source-dirs:   test
     main-is:          MyLibTest.hs
-    build-depends:    base >=4.14.2.0, bifunctors, bifunctors-extra
+    build-depends:    base, bifunctors, bifunctors-extra
     ghc-options:      -Wall

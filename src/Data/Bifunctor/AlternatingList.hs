@@ -33,6 +33,10 @@ import Data.Maybe (fromMaybe)
 import Data.Semigroup.Foldable
 import Data.Function (fix)
 
+
+-- | @
+--   AltList a b = a | (a,b,a) | (a,b,a,b,a) | ...
+--   @
 data AltList a b = Last a | Next a b (AltList a b)
   deriving (Show, Read, Eq, Ord, Functor, Foldable, Traversable)
 
