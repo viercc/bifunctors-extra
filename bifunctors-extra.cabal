@@ -15,12 +15,16 @@ extra-source-files: CHANGELOG.md, README.md
 tested-with:
 
 library
-    exposed-modules:  Data.Bifunctor.AlternatingList,
-                      Data.Bifunctor.Free
-    build-depends:    base >= 4.18,
-                      bifunctors >= 6,
-                      comonad,
-                      free
+    exposed-modules:
+      Data.Bifunctor.AlternatingList,
+      Data.Bifunctor.Free
+    build-depends:
+      base >= 4.18,
+      bifunctors >= 6,
+      comonad,
+      -- the version number in the patch PR
+      semigroupoids == 5.3.7,
+      free
     hs-source-dirs:   src
     default-language: Haskell2010
     ghc-options:      -Wall

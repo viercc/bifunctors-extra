@@ -7,10 +7,18 @@ source-repository-package
   location: https://github.com/ekmett/comonad.git
   branch: main
 
+-- bifunctors-6
 source-repository-package
     type: git
     location: https://github.com/ekmett/bifunctors.git
     tag: ca1116599b85b2344118aed2e49ebb707142598a
+
+-- patched version to use with bifunctors-6
+-- (see https://github.com/ekmett/semigroupoids/pull/126)
+source-repository-package
+    type: git
+    location: https://github.com/Topsii/semigroupoids.git
+    tag: a7b84a855fcf445992dae82998c69985997ec21f
 
 package bifunctors-extra
     ghc-options: -Werror

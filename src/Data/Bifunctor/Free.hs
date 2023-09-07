@@ -2,6 +2,9 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE TypeOperators #-}
+{-# LANGUAGE RankNTypes #-}
+{-# LANGUAGE QuantifiedConstraints #-}
 -- | 'Control.Monad.Free' but taking a secondary covariant parameter.
 module Data.Bifunctor.Free where
 
@@ -25,5 +28,5 @@ instance Bifunctor p => Bifunctor (Free p) where
     first f = WrapFree . Original.hoistFree (first f) . unwrapFree
     second = fmap
 
-instance BifunctorFunctor Free where
-    bifmap h = WrapFree . Original.hoistFree h . unwrapFree
+hoistFree :: Bifunctor q => (p :-> q) -> (Free p :-> Free q)
+hoistFree h = WrapFree . Original.hoistFree h . unwrapFree
