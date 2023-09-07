@@ -17,14 +17,18 @@ tested-with:
 library
     exposed-modules:
       Data.Bifunctor.AlternatingList,
-      Data.Bifunctor.Free
+      Data.Bifunctor.Free,
+      Data.Bifunctor.Kan.Ran,
+      Data.Bifunctor.Monad,
+      Data.Bifunctor.Monad.Module
     build-depends:
       base >= 4.18,
       bifunctors >= 6,
       comonad,
       -- the version number in the patch PR
       semigroupoids == 5.3.7,
-      free
+      free,
+      profunctors
     hs-source-dirs:   src
     default-language: Haskell2010
     ghc-options:      -Wall
