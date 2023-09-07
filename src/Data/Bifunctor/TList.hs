@@ -40,8 +40,11 @@ unfoldr step = go
         Left b -> End b
         Right (a,s') -> Cons a (go s')
 
-toList :: TList a any -> [a]
-toList = foldr (:) (const [])
+toList :: TList a b -> ([a], b)
+toList = foldr (\ a ~(as, b) -> (a:as, b)) ([], )
+
+toList_ :: TList a b -> [a]
+toList_ = foldr (:) (const [])
 
 fromList :: [a] -> TList a ()
 fromList = List.foldr Cons (End ())
